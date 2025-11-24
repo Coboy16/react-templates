@@ -12,13 +12,13 @@ export class FlutterBridge {
     
     while (!this.isFlutterReady()) {
       if (Date.now() - startTime > timeout) {
-        console.warn('⚠️ Flutter timeout exceeded');
+        console.warn('Flutter timeout exceeded');
         return false;
       }
       await new Promise(resolve => setTimeout(resolve, 500));
     }
     
-    console.log('✅ Flutter ready');
+    console.log('Flutter ready');
     return true;
   }
 
