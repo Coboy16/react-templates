@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import  { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 declare global {
   interface Window {
@@ -39,38 +39,73 @@ declare global {
 function FlutterHost() {
   const containerRef = useRef<HTMLDivElement>(null);
   const isLoadedRef = useRef(false);
+  const scriptLoadedRef = useRef(false);
   
   useEffect(() => {
+    const loadFlutterScript = () => {
+      return new Promise<void>((resolve, reject) => {
+        // Si el script ya está cargado, resolver inmediatamente
+        if (scriptLoadedRef.current || window._flutter) {
+          resolve();
+          return;
+        }
+
+        const baseUrl = import.meta.env.BASE_URL;
+        const script = document.createElement('script');
+        script.src = `${baseUrl}flutter_app/flutter.js`;
+        script.async = true;
+        
+        script.onload = () => {
+          console.log('✅ Script flutter.js cargado correctamente');
+          scriptLoadedRef.current = true;
+          resolve();
+        };
+        
+        script.onerror = () => {
+          console.error('❌ Error al cargar flutter.js');
+          reject(new Error('Failed to load flutter.js'));
+        };
+        
+        document.head.appendChild(script);
+        console.log('📥 Cargando script flutter.js desde:', script.src);
+      });
+    };
+
     const loadFlutter = async () => {
       if (!containerRef.current || isLoadedRef.current) return;
       
       console.log('🚀 Iniciando carga de Flutter...');
+      const baseUrl = import.meta.env.BASE_URL;
+      console.log('📍 Base URL:', baseUrl);
       
-      // Esperar a que el loader de Flutter esté disponible
-      let attempts = 0;
-      while (!window._flutter && attempts < 50) {
-        console.log(`⏳ Esperando Flutter loader... (${attempts + 1}/50)`);
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-      }
-
-      if (!window._flutter) {
-        console.error('❌ Flutter loader no disponible después de 5 segundos');
-        return;
-      }
-
       try {
+        // Primero cargar el script de flutter.js
+        await loadFlutterScript();
+        
+        // Esperar a que el loader de Flutter esté disponible
+        let attempts = 0;
+        while (!window._flutter && attempts < 50) {
+          console.log(`⏳ Esperando Flutter loader... (${attempts + 1}/50)`);
+          await new Promise(resolve => setTimeout(resolve, 100));
+          attempts++;
+        }
+
+        if (!window._flutter) {
+          console.error('❌ Flutter loader no disponible después de 5 segundos');
+          return;
+        }
+
         console.log('✅ Flutter loader encontrado, inicializando...');
         
         await window._flutter.loader.loadEntrypoint({
-          entrypointUrl: "/flutter_app/main.dart.js",
+          entrypointUrl: `${baseUrl}flutter_app/main.dart.js`,
           onEntrypointLoaded: async function (engineInitializer: any) {
             console.log('🔧 Inicializando engine de Flutter...');
             
             const appRunner = await engineInitializer.initializeEngine({
               hostElement: containerRef.current,
-              assetBase: "/flutter_app/",
-              renderer: "canvaskit", // Cambiado a canvaskit para mejor rendimiento
+              assetBase: `${baseUrl}flutter_app/`,
+              renderer: "canvaskit",
             });
             
             console.log('🎯 Ejecutando app de Flutter...');
@@ -108,7 +143,6 @@ function FlutterHost() {
 
     loadFlutter();
 
-    // Cleanup
     return () => {
       console.log('🧹 Limpiando FlutterHost...');
     };
