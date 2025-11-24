@@ -42,9 +42,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, onNavigate }) => {
         <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-4 border border-purple-100">
           <div className="flex items-center gap-2 text-[#2800C8] font-semibold mb-1">
             <LayoutDashboard className="w-4 h-4" />
-            <span className="text-sm">Sistema Activo</span>
+            <span className="text-sm">Konecta System</span>
           </div>
-          <p className="text-xs text-gray-600">Todas las funciones operativas</p>
+          <p className="text-xs text-gray-600"> © {new Date().getFullYear()}. Todos los derechos reservados.</p>
         </div>
       </div>
     </div>

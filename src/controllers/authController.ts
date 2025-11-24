@@ -29,7 +29,8 @@ export class AuthController {
         settings.showGoogle,
         settings.showApple,
         settings.showTerms,
-        settings.backgroundImage
+        settings.backgroundImage,
+        settings.logoImage 
       );
       Logger.success('Template 3 settings actualizados');
     } catch (error) {

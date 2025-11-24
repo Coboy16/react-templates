@@ -10,6 +10,7 @@ const AuthControls: React.FC<AuthControlsProps> = ({
   onTemplate3SettingsChange,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const logoInputRef = useRef<HTMLInputElement>(null); 
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -19,6 +20,20 @@ const AuthControls: React.FC<AuthControlsProps> = ({
         onTemplate3SettingsChange({
           ...template3Settings,
           backgroundImage: event.target?.result as string,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        onTemplate3SettingsChange({
+          ...template3Settings,
+          logoImage: event.target?.result as string,
         });
       };
       reader.readAsDataURL(file);
@@ -82,6 +97,43 @@ const AuthControls: React.FC<AuthControlsProps> = ({
           </h3>
 
           <div className="space-y-4">
+            {/* Logo */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
+                <ImageIcon className="w-4 h-4" />
+                Logo Central
+              </label>
+              <input
+                ref={logoInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleLogoUpload}
+                className="hidden"
+              />
+              <button
+                onClick={() => logoInputRef.current?.click()}
+                className="w-full p-4 border-2 border-dashed border-[#2800C8] rounded-lg bg-white hover:bg-purple-50 text-[#2800C8] font-semibold transition-all flex items-center justify-center gap-2"
+              >
+                <Upload className="w-5 h-5" />
+                {template3Settings.logoImage
+                  ? '✓ Logo cargado'
+                  : 'Subir logo personalizado'}
+              </button>
+              {template3Settings.logoImage && (
+                <button
+                  onClick={() =>
+                    onTemplate3SettingsChange({
+                      ...template3Settings,
+                      logoImage: null,
+                    })
+                  }
+                  className="w-full mt-2 p-3 bg-red-500 hover:bg-red-600 text-white rounded-lg font-semibold transition-all flex items-center justify-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Eliminar logo
+                </button>
+              )}
+            </div>
             {/* Upload de Imagen */}
             <div>
               <label className="block text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">

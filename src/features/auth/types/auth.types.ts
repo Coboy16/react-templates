@@ -1,5 +1,6 @@
 export interface Template3Settings {
   backgroundImage: string | null;
+  logoImage: string | null;
   showGoogle: boolean;
   showApple: boolean;
   showTerms: boolean;

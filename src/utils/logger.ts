@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/**
- * Centralized logging utility
- */
 
 type LogLevel = 'info' | 'warn' | 'error' | 'success';
 

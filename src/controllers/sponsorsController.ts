@@ -11,12 +11,12 @@ export class SponsorsController {
           settings.showLinkedin,
           settings.showDescription
         );
-        console.log('📋 Sponsors settings actualizados:', settings);
+        console.log('Sponsors settings actualizados:', settings);
       } catch (error) {
-        console.error('❌ Error al actualizar Sponsors settings:', error);
+        console.error('Error al actualizar Sponsors settings:', error);
       }
     } else {
-      console.warn('⚠️ sponsorsControls.updateSettings no está disponible');
+      console.warn('sponsorsControls.updateSettings no está disponible');
     }
   }
 

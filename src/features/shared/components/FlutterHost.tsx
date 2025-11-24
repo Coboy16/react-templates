@@ -29,7 +29,8 @@ declare global {
         showGoogle: boolean,
         showApple: boolean,
         showTerms: boolean,
-        backgroundImage: string | null
+        backgroundImage: string | null,
+        logoImage: string | null
       ) => void;
     };
   }

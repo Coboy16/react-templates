@@ -1,11 +1,4 @@
-/**
- * Utility functions for Flutter bridge communication
- */
-
 export class FlutterBridge {
-  /**
-   * Check if Flutter is ready
-   */
   static isFlutterReady(): boolean {
     return !!(
       window.flutterControls &&
@@ -14,9 +7,6 @@ export class FlutterBridge {
     );
   }
 
-  /**
-   * Wait for Flutter to be ready
-   */
   static async waitForFlutter(timeout = 10000): Promise<boolean> {
     const startTime = Date.now();
     
@@ -32,9 +22,6 @@ export class FlutterBridge {
     return true;
   }
 
-  /**
-   * Get Flutter status
-   */
   static getStatus() {
     return {
       flutterControls: !!window.flutterControls,

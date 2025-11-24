@@ -7,6 +7,7 @@ export const useAuthTemplate = (isReady: boolean, currentSection: string) => {
   const [template, setTemplate] = useState('template1');
   const [template3Settings, setTemplate3Settings] = useState<Template3Settings>({
     backgroundImage: null,
+    logoImage: null,
     showGoogle: true,
     showApple: true,
     showTerms: true,

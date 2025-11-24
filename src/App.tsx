@@ -13,11 +13,10 @@ import { Logger } from './utils/logger';
 
 
 function App() {
-  const [currentSection, setCurrentSection] = useState('sponsors'); // ← CAMBIADO: Inicia en sponsors
+  const [currentSection, setCurrentSection] = useState('auth'); 
   const [flutterReady, setFlutterReady] = useState(false);
   const isInitialMount = useRef(true);
 
-  // Custom hooks for features
   const authHook = useAuthTemplate(flutterReady, currentSection);
   const sponsorsHook = useSponsorsSettings(flutterReady, currentSection);
 
@@ -49,7 +48,7 @@ function App() {
       clearInterval(checkFlutterReady);
       if (!flutterReady) {
         Logger.warn('Flutter no se inicializó completamente');
-        setFlutterReady(true); // Forzar para permitir interacción
+        setFlutterReady(true); 
       }
     }, 10000);
 
@@ -70,9 +69,9 @@ function App() {
   // Navegación inicial cuando Flutter esté listo
   useEffect(() => {
     if (flutterReady && isInitialMount.current) {
-      Logger.info('Navegación inicial a sponsors');
+      Logger.info('Navegación inicial a auth');
       setTimeout(() => {
-        handleNavigate('sponsors');
+        handleNavigate('auth');
         isInitialMount.current = false;
       }, 500);
     }
