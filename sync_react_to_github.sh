@@ -34,6 +34,7 @@ echo "📂 Copiando archivos desde Bitbucket a GitHub..."
 
 rsync -av --delete \
   --exclude='.git' \
+  --exclude='.github' \
   --exclude='node_modules' \
   --exclude='dist' \
   --exclude='build' \
