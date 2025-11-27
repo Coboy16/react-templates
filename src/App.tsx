@@ -10,6 +10,8 @@ import { useAuthTemplate } from './features/auth/hooks/useAuthTemplate';
 import { useSponsorsSettings } from './features/sponsors/hooks/useSponsorsSettings';
 import { FlutterBridge } from './utils/flutterBridge';
 import { Logger } from './utils/logger';
+import LoginControls from './features/login/components/LoginControls';
+import { useLoginSettings } from './features/login/hooks/useLoginSettings';
 
 
 function App() {
@@ -18,26 +20,30 @@ function App() {
   const isInitialMount = useRef(true);
 
   const authHook = useAuthTemplate(flutterReady, currentSection);
+  const loginHook = useLoginSettings(flutterReady, currentSection);
   const sponsorsHook = useSponsorsSettings(flutterReady, currentSection);
 
   // Verificar cuando Flutter esté listo
   useEffect(() => {
     const checkFlutterReady = setInterval(() => {
       const status = FlutterBridge.getStatus();
-      
+
       // Solo requiere flutterControls para estar listo
       if (status.flutterControls) {
         Logger.success('Flutter listo para navegación');
         setFlutterReady(true);
         clearInterval(checkFlutterReady);
-        
         // Log de controles disponibles
         if (status.authControls) {
           Logger.success('authControls disponible');
         } else {
           Logger.warn('authControls no disponible');
         }
-        
+        if (status.loginControls) {
+          Logger.success('loginControls disponible');
+        } else {
+          Logger.warn('loginControls no disponible');
+        }
         if (status.sponsorsControls) {
           Logger.success('sponsorsControls disponible');
         }
@@ -48,7 +54,7 @@ function App() {
       clearInterval(checkFlutterReady);
       if (!flutterReady) {
         Logger.warn('Flutter no se inicializó completamente');
-        setFlutterReady(true); 
+        setFlutterReady(true);
       }
     }, 10000);
 
@@ -58,7 +64,7 @@ function App() {
   const handleNavigate = (section: string) => {
     Logger.info(`Navegando a: ${section}`);
     setCurrentSection(section);
-    
+
     if (flutterReady && FlutterNavigator.isAvailable()) {
       FlutterNavigator.navigateTo(section);
     } else {
@@ -99,6 +105,19 @@ function App() {
             onTemplate3SettingsChange={authHook.setTemplate3Settings}
           />
         );
+      case 'login':
+        return (
+          <LoginControls
+            currentPage={loginHook.currentPage}
+            onPageChange={loginHook.setCurrentPage}
+            profileInfoSettings={loginHook.profileInfoSettings}
+            onProfileInfoSettingsChange={loginHook.setProfileInfoSettings}
+            profileDetailsSettings={loginHook.profileDetailsSettings}
+            onProfileDetailsSettingsChange={
+              loginHook.setProfileDetailsSettings
+            }
+          />
+        );
       case 'speakers':
         return <SpeakersControls />;
       case 'agenda':
@@ -108,7 +127,9 @@ function App() {
           <div className="flex flex-col items-center justify-center py-20">
             <div className="text-6xl mb-4">🚧</div>
             <p className="text-gray-600 font-medium">Sección en desarrollo</p>
-            <p className="text-sm text-gray-500 mt-1">Próximamente disponible</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Próximamente disponible
+            </p>
           </div>
         );
     }

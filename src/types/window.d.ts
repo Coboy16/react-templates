@@ -27,8 +27,28 @@ declare global {
         showApple: boolean,
         showTerms: boolean,
         backgroundImage: string | null,
-        logoImage: string | null 
+        logoImage: string | null
       ) => void;
+    };
+    loginControls?: {
+      navigateToPage: (page: string) => void;
+      updateProfileInfoSettings: (
+        showName: boolean,
+        showCountry: boolean,
+        showEmail: boolean,
+        canEditPhoto: boolean
+      ) => void;
+      updateProfileDetailsSettings: (
+        showPosition: boolean,
+        showLinkedin: boolean,
+        showAbout: boolean,
+        canEditPosition: boolean,
+        linkedinRequired: boolean,
+        aboutRequired: boolean
+      ) => void;
+    };
+    reactCallbacks?: {
+      onLoginPageChange?: (page: string) => void;
     };
   }
 }

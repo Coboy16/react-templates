@@ -3,7 +3,8 @@ export class FlutterBridge {
     return !!(
       window.flutterControls &&
       window.authControls &&
-      window.sponsorsControls
+      window.sponsorsControls && 
+      window.loginControls
     );
   }
 
@@ -27,6 +28,7 @@ export class FlutterBridge {
       flutterControls: !!window.flutterControls,
       authControls: !!window.authControls,
       sponsorsControls: !!window.sponsorsControls,
+      loginControls: !!window.loginControls?.navigateToPage,
     };
   }
 }
